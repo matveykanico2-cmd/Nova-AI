@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova AI - Универсальный Интеллект</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" id="newChatBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Новый чат</span>
+                </button>
+            </div>
+
+            <div class="sidebar-search">
+                <input type="text" placeholder="Поиск в истории..." id="searchHistory">
+            </div>
+
+            <div class="history-sections" id="historySections"></div>
+
+            <div class="sidebar-footer">
+                <button class="sidebar-btn" onclick="app.showSettings()">
+                    <span>⚙️</span> Настройки
+                </button>
+                <button class="sidebar-btn" onclick="app.showCapabilities()">
+                    <span>📚</span> Возможности
+                </button>
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar">U</div>
+                    <span class="user-name">User</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="mobile-header" id="mobileHeader">
+                <button class="menu-toggle" id="menuToggle">☰</button>
+                <span class="model-name">Nova AI</span>
+                <button class="new-chat-mobile" id="newChatMobile">+</button>
+            </header>
+
+            <div class="mode-selector" id="modeSelector">
+                <button class="mode-btn active" data-mode="chat" title="Чат"><span class="mode-icon">💬</span></button>
+                <button class="mode-btn" data-mode="code" title="Код"><span class="mode-icon">💻</span></button>
+                <button class="mode-btn" data-mode="vision" title="Зрение"><span class="mode-icon">👁️</span></button>
+                <button class="mode-btn" data-mode="voice" title="Голос"><span class="mode-icon">🎤</span></button>
+                <button class="mode-btn" data-mode="search" title="Поиск"><span class="mode-icon">🔍</span></button>
+                <button class="mode-btn" data-mode="tools" title="Инструменты"><span class="mode-icon">🔧</span></button>
+            </div>
+
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-logo">🔮</div>
+                    <h1 class="welcome-title">Nova AI</h1>
+                    <p class="welcome-subtitle">Универсальный интеллект с полным набором возможностей</p>
+                    
+                    <div class="capabilities-grid" id="capabilitiesGrid">
+                        <div class="capability-card" data-capability="text">
+                            <span class="cap-icon">📝</span>
+                            <h3>Текст и Код</h3>
+                            <p>Генерация, редактирование, программирование, перевод</p>
+                        </div>
+                        <div class="capability-card" data-capability="multimodal">
+                            <span class="cap-icon">👁️</span>
+                            <h3>Мультимодальность</h3>
+                            <p>Зрение, звук, голос, изображения</p>
+                        </div>
+                        <div class="capability-card" data-capability="reasoning">
+                            <span class="cap-icon">🧠</span>
+                            <h3>Логика</h3>
+                            <p>Рассуждения, обучение, решение задач</p>
+                        </div>
+                        <div class="capability-card" data-capability="tools">
+                            <span class="cap-icon">🔧</span>
+                            <h3>Инструменты</h3>
+                            <p>Поиск, выполнение кода, интеграции</p>
+                        </div>
+                        <div class="capability-card" data-capability="creative">
+                            <span class="cap-icon">🎨</span>
+                            <h3>Творчество</h3>
+                            <p>Ролеплей, мозговой штурм, креатив</p>
+                        </div>
+                        <div class="capability-card" data-capability="agent">
+                            <span class="cap-icon">🤖</span>
+                            <h3>Агенты</h3>
+                            <p>Custom GPTs, автоматизация</p>
+                        </div>
+                    </div>
+
+                    <div class="suggestions-grid">
+                        <button class="suggestion-card" data-prompt="Напиши статью про ИИ">
+                            <span class="suggestion-icon">📝</span><span>Написать статью</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Создай веб-приложение на React">
+                            <span class="suggestion-icon">💻</span><span>Создать код</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Объясни квантовую физику">
+                            <span class="suggestion-icon">🎓</span><span>Обучение</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Придумай идею для стартапа">
+                            <span class="suggestion-icon">💡</span><span>Мозговой штурм</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="messages-wrapper" id="messagesWrapper"></div>
+            </div>
+
+            <div class="input-area" id="inputArea">
+                <div class="file-upload-container" id="fileUploadContainer" style="display: none;">
+                    <div class="file-drop-zone" id="fileDropZone">
+                        <span>📎</span>
+                        <p>Перетащите файлы сюда или кликните для загрузки</p>
+                        <span class="file-types">Изображения, PDF, DOC, TXT, код</span>
+                    </div>
+                    <input type="file" id="fileInput" multiple accept="image/*,.pdf,.doc,.docx,.txt,.js,.py,.ts,.java,.cpp,.rs">
+                    <div class="uploaded-files" id="uploadedFiles"></div>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-box">
+                        <button class="attach-btn" id="attachBtn" title="Прикрепить файл">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                            </svg>
+                        </button>
+                        <textarea id="messageInput" placeholder="Отправьте сообщение Nova..." rows="1"></textarea>
+                        <button class="voice-btn" id="voiceBtn" title="Голосовой ввод">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <line x1="12" y1="19" x2="12" y2="23"></line>
+                                <line x1="8" y1="23" x2="16" y2="23"></line>
+                            </svg>
+                        </button>
+                        <button class="send-btn" id="sendBtn" disabled>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="input-tools">
+                        <button class="tool-btn" id="searchToggle" title="Поиск в интернете"><span>🌐</span> Поиск</button>
+                        <button class="tool-btn" id="codeToggle" title="Выполнение кода"><span>⚡</span> Код</button>
+                        <button class="tool-btn" id="reasoningToggle" title="Цепочка рассуждений"><span>🧠</span> CoT</button>
+                        <select class="model-select" id="modelSelect">
+                            <option value="nova-4">Nova 4.0</option>
+                            <option value="nova-3.5">Nova 3.5</option>
+                            <option value="nova-mini">Nova Mini</option>
+                        </select>
+                    </div>
+                    <p class="disclaimer">Nova может допускать ошибки. Проверяйте важную информацию.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Настройки</h2>
+                <button class="modal-close" onclick="app.closeModal('settingsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label>Тема</label>
+                    <select id="themeSelect">
+                        <option value="dark">Тёмная</option>
+                        <option value="light">Светлая</option>
+                        <option value="auto">Авто</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <button class="btn-primary" onclick="testSearchConnection()" style="width: 100%; margin-bottom: 10px;">
+                        🧪 Тест поиска
+                    </button>
+                    <button class="btn-primary" onclick="testKodaProConnection()" style="width: 100%;">
+                        🔮 Тест Koda-Pro
+                    </button>
+                    <div id="testSearchResult" style="margin-top: 10px; font-size: 14px;"></div>
+                </div>
+                <div class="setting-group">
+                    <label>Язык интерфейса</label>
+                    <select id="languageSelect">
+                        <option value="ru">Русский</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label><input type="checkbox" id="searchEnabled"> Поиск в интернете</label>
+                </div>
+                <div class="setting-group">
+                    <label><input type="checkbox" id="codeExecutionEnabled"> Выполнение кода</label>
+                </div>
+                <div class="setting-group">
+                    <label><input type="checkbox" id="reasoningEnabled" checked> Цепочка рассуждений</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="app.saveSettings()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capabilities Modal -->
+    <div class="modal" id="capabilitiesModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>📚 Возможности Nova AI</h2>
+                <button class="modal-close" onclick="app.closeModal('capabilitiesModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="capabilities-list">
+                    <div class="capability-section">
+                        <h3>📝 Текст и Код</h3>
+                        <ul>
+                            <li>Генерация статей, эссе, постов, писем, стихов, сценариев</li>
+                            <li>Программирование на Python, JS/TS, Rust, C++, SQL</li>
+                            <li>Перевод между 50+ языками</li>
+                            <li>Саммаризация и анализ больших текстов</li>
+                        </ul>
+                    </div>
+                    <div class="capability-section">
+                        <h3>👁️ Мультимодальность</h3>
+                        <ul>
+                            <li>Понимание изображений, графиков, скриншотов</li>
+                            <li>Транскрибация аудио</li>
+                            <li>Голосовой режим с минимальной задержкой</li>
+                        </ul>
+                    </div>
+                    <div class="capability-section">
+                        <h3>🧠 Логика и Обучение</h3>
+                        <ul>
+                            <li>Chain-of-Thought рассуждения</li>
+                            <li>Персональное менторство</li>
+                            <li>Решение задач от алгебры до олимпиад</li>
+                        </ul>
+                    </div>
+                    <div class="capability-section">
+                        <h3>🔧 Инструменты</h3>
+                        <ul>
+                            <li>Поиск в интернете</li>
+                            <li>Выполнение кода Python</li>
+                            <li>Интеграции с API, Notion, Slack</li>
+                            <li>Custom GPTs</li>
+                        </ul>
+                    </div>
+                    <div class="capability-section">
+                        <h3>🎨 Творчество</h3>
+                        <ul>
+                            <li>Ролевые игры с памятью контекста</li>
+                            <li>Мозговой штурм идей</li>
+                            <li>Адаптация тона и формата</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/formatter.js"></script>
+    <script src="js/modules/text-processor.js"></script>
+    <script src="js/modules/code-engine.js"></script>
+    <script src="js/modules/translator.js"></script>
+    <script src="js/modules/summarizer.js"></script>
+    <script src="js/modules/vision-processor.js"></script>
+    <script src="js/modules/audio-processor.js"></script>
+    <script src="js/modules/voice-chat.js"></script>
+    <script src="js/modules/reasoning-engine.js"></script>
+    <script src="js/modules/tutor.js"></script>
+    <script src="js/modules/web-search.js"></script>
+    <script src="js/modules/koda-pro.js"></script>
+    <script src="js/modules/code-executor.js"></script>
+    <script src="js/modules/integrations.js"></script>
+    <script src="js/modules/roleplay.js"></script>
+    <script src="js/modules/brainstorm.js"></script>
+    <script src="js/real-ai.js"></script>
+    <script src="js/ai-brain.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Test Search Function -->
+    <script>
+    function testSearchConnection() {
+        var resultDiv = document.getElementById('testSearchResult');
+        if (!resultDiv) return;
+        
+        resultDiv.innerHTML = '⏳ Тестирование...';
+        
+        if (window.WebSearch && WebSearch.testConnection) {
+            WebSearch.testConnection().then(function(result) {
+                if (result.success) {
+                    resultDiv.innerHTML = '<span style="color: #10a37f;">✅ ' + result.message + '</span>';
+                } else {
+                    resultDiv.innerHTML = '<span style="color: #ef4444;">❌ ' + result.message + '</span>';
+                }
+            }).catch(function(error) {
+                resultDiv.innerHTML = '<span style="color: #ef4444;">❌ Ошибка: ' + error.message + '</span>';
+            });
+        } else {
+            resultDiv.innerHTML = '<span style="color: #ef4444;">❌ WebSearch не загружен</span>';
+        }
+    }
+    
+    function testKodaProConnection() {
+        var resultDiv = document.getElementById('testSearchResult');
+        if (!resultDiv) return;
+        
+        resultDiv.innerHTML = '⏳ Тестирование Koda-Pro...';
+        
+        if (window.KodaPro && KodaPro.testConnection) {
+            KodaPro.testConnection().then(function(result) {
+                if (result) {
+                    resultDiv.innerHTML = '<span style="color: #10a37f;">✅ Koda-Pro готов!</span>';
+                } else {
+                    resultDiv.innerHTML = '<span style="color: #ef4444;">❌ Koda-Pro недоступен</span>';
+                }
+            }).catch(function(error) {
+                resultDiv.innerHTML = '<span style="color: #ef4444;">❌ Ошибка: ' + error.message + '</span>';
+            });
+        } else {
+            resultDiv.innerHTML = '<span style="color: #ef4444;">❌ KodaPro не загружен</span>';
+        }
+    }
+    </script>
+</body>
+</html>
